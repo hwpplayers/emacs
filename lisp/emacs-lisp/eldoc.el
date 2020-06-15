@@ -256,7 +256,9 @@ reflect the change."
                (when (or eldoc-mode
                          (and global-eldoc-mode
                               (eldoc--supported-p)))
-                 (eldoc-print-current-symbol-info))))))
+                 ;; Don't ignore, but also don't full-on signal errors
+                 (with-demoted-errors "eldoc error: %s"
+                   (eldoc-print-current-symbol-info)) )))))
 
   ;; If user has changed the idle delay, update the timer.
   (cond ((not (= eldoc-idle-delay eldoc-current-idle-delay))
